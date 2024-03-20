@@ -1,0 +1,47 @@
+import json 
+import boto3
+from datetime import datetime
+
+# Initialize DynamoDB resource and table
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('Votes')  # Update with your DynamoDB table name
+
+# Initialize S3 resource and bucket
+s3 = boto3.resource('s3')
+bucket_name = 'your_bucket_name'  # Update with your S3 bucket name
+
+def lambda_handler(event, context):
+    try:
+        # Extract data from the event
+        voter_id = event.get('voterId')
+        vote_option = event.get('voteption')
+        timestamp = int(datetime.now().timestamp())
+
+        # Store the vote in DynamoDB
+        table.put_item(
+            Item={
+                'VoterID': voter_id,
+                'VoteOption': vote_option,
+                'Timestamp': timestamp
+            }
+        )
+
+        # Store latest tallies in S3 JSON file
+        tally_key = 'latest_tallies.json'
+        latest_tallies = table.scan()['Items']
+        s3.Object(bucket_name, tally_key).put(Body=json.dumps(latest_tallies))
+
+        # Return success response
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'message': 'Vote stored successfully'})
+        }
+    except Exception as e:
+        print("Error:", e)
+        # Return error response
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'message': 'Internal Server Error'})
+        }
+
+
