@@ -16,6 +16,7 @@ STEP-5: ADDING S3 TRIGGER FOR S3 AND LAMBDA FUNCTION
 STEP-6: CREATE DYNAMODB TABLE VOTES AND FIND THE RESULTS OF THE TALLY 
 
 SERVICES USED:
+
 API Gateway: This creates a POST endpoint for user votes, and forwards an event to
 Lambda.
 Lambda: These are scalable containers for the app. There are two Lambda functions:
