@@ -19,8 +19,11 @@ SERVICES USED:
 
 API Gateway: This creates a POST endpoint for user votes, and forwards an event to
 Lambda.
+
 Lambda: These are scalable containers for the app. There are two Lambda functions:
 Function 1: Updates the database with a user’s vote
+
 DynamoDB: The data is stored in a managed NoSQL database.
+
 S3: HTML/CSS/JS files are hosted as a website. A JSON file on S3
 caches the latest tallies, which reduces the number of calls to DynamoDB.
